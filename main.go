@@ -21,7 +21,7 @@ func bimgVersion(w http.ResponseWriter, r *http.Request) {
 func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8080" // Default port if not set
+		port = "8000" // Default port if not set
 	}
 
 	http.HandleFunc("/", helloHandler)
