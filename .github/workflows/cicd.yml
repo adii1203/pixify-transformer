@@ -13,19 +13,18 @@ jobs:
         uses: actions/checkout@v4
       - name: Create .env file
         run: echo "PORT=${{secrets.PORT}}" >> .env
-      - name: Login to docker hub
-        run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
-      - name: Build docker image
-        run: docker build -t adii1203/pixify-transformer .
-      - name: Push docker image
-        run: docker push adii1203/pixify-transformer:latest
+
   deploy:
     needs: build
     runs-on: self-hosted
     steps:
-      - name: Pull the docker image
-        run: docker pull adii1203/pixify-transformer:latest
-      - name: Stop the running container
-        run: docker rm -f pixify-transformer
-      - name: Run the docker container
-        run: docker run -d -p 8080:8080 --name pixify-transformer adii1203/pixify-transformer:latest
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install dependencies
+        run: go mod tidy
+      - name: Build go binary
+        run: go build -o pixify-transformer
+      - name: Run go binary
+        run: ./pixify-transformer

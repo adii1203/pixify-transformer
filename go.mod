@@ -3,6 +3,7 @@ module github.com/adii1203/pixify-transformer
 go 1.23.3
 
 require (
+	github.com/h2non/bimg v1.1.9 // indirect
 	github.com/labstack/echo/v4 v4.13.3 // indirect
 	github.com/labstack/gommon v0.4.2 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
