@@ -27,4 +27,4 @@ jobs:
       - name: Build go binary
         run: go build -o pixify-transformer
       - name: Run go binary
-        run: ./pixify-transformer
+        run: nohup ./pixify-transformer > output.log 2>&1 & echo $! > pixify-transformer.pid
