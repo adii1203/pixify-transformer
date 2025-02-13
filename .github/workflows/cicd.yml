@@ -22,9 +22,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Stop existing tmux session (if running)
+        run: |
+          tmux kill-session -t pixify-session || true
       - name: Install dependencies
         run: go mod tidy
       - name: Build go binary
         run: go build -o pixify-transformer
       - name: Run go binary
-        run: ./pixify-transformer > output.log 2>&1 & echo $! > pixify-transformer.pid
+        run: tmux new-session -d -s pixify-session './pixify-transformer'
