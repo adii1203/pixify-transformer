@@ -16,9 +16,9 @@ func main() {
 
 	e := echo.New()
 
-	e.GET("/", func(c echo.Context) error {
-		path := c.Path()
-		fmt.Println(path)
+	e.GET("/:id", func(c echo.Context) error {
+		path := c.Param("id")
+		fmt.Println("Path: " + path + "\n")
 		fmt.Println(c.Request().URL)
 
 		return c.String(http.StatusOK, path)
