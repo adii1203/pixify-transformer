@@ -2,21 +2,11 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 
-	"github.com/h2non/bimg"
+	"github.com/labstack/echo/v4"
 )
-
-func helloHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello from EC2!")
-}
-
-func bimgVersion(w http.ResponseWriter, r *http.Request) {
-	v := bimg.Version
-	fmt.Fprintf(w, "bimg version: %s", v)
-}
 
 func main() {
 	port := os.Getenv("PORT")
@@ -24,12 +14,15 @@ func main() {
 		port = "8000" // Default port if not set
 	}
 
-	http.HandleFunc("/", helloHandler)
-	http.HandleFunc("/bimg", bimgVersion)
+	e := echo.New()
 
-	log.Printf("Starting server on port %s...", port)
-	err := http.ListenAndServe(":"+port, nil)
-	if err != nil {
-		log.Fatalf("Could not start server: %s", err)
-	}
+	e.GET("/", func(c echo.Context) error {
+		path := c.Path()
+		fmt.Println(path)
+		fmt.Println(c.Request().URL)
+
+		return c.String(http.StatusOK, path)
+	})
+
+	e.Logger.Fatal(e.Start(":" + port))
 }
