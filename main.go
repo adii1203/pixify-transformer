@@ -17,7 +17,7 @@ func main() {
 	}
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8000" // Default port if not set
+		port = "8000"
 	}
 
 	e := echo.New()
