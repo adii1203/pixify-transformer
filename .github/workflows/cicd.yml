@@ -13,6 +13,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Create .env file
         run: echo "PORT=${{secrets.PORT}}" >> .env
+        env:
+          PORT: ${{secrets.PORT}}
 
   deploy:
     needs: build
