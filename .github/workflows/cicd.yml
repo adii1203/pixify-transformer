@@ -20,13 +20,6 @@ jobs:
     needs: build
     runs-on: self-hosted
     steps:
-      - name: Add Go to PATH
-        run: |
-          echo "export PATH=$PATH:/usr/local/go/bin" >> ~/.bashrc
-          echo "export PATH=$PATH:/usr/local/go/bin" >> ~/.profile
-          source ~/.bashrc
-          source ~/.profile
-          go version
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -39,4 +32,6 @@ jobs:
       - name: Build go binary
         run: go build -o pixify-transformer
       - name: Run go binary
-        run: tmux new-session -d -s pixify-session './pixify-transformer'
+        run: |
+          tmux new-session -d -s pixify-session
+          tmux send-keys -t pixify-session './pixify-transformer > server.log 2>&1' C-m
