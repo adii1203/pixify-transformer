@@ -1,13 +1,8 @@
 package main
 
 import (
-	"context"
-	"fmt"
 	"log"
 	"os"
-
-	"github.com/aws/aws-sdk-go-v2/service/s3"
-	"github.com/aws/aws-sdk-go/aws"
 
 	client "github.com/adii1203/pixify-transformer/S3"
 	"github.com/joho/godotenv"
@@ -29,22 +24,15 @@ func main() {
 	e := echo.New()
 
 	e.GET("/:id", func(c echo.Context) error {
-		image := getFromS3(s3Client)
+		object, err := s3Client.GetObjectFromRawBucket(c.Param("id"))
+		object.Body.Close()
 
-		return c.JSON(200, image.ETag)
+		if err != nil {
+			return c.JSON(500, "Error fetching image")
+		}
+
+		return c.Stream(200, *object.ContentType, object.Body)
 	})
 
 	e.Logger.Fatal(e.Start(":" + port))
-}
-
-func getFromS3(s3Client *client.S3Client) *s3.GetObjectOutput {
-	output, err := s3Client.S3.GetObject(context.Background(), &s3.GetObjectInput{
-		Bucket: aws.String("pixify-raw-images-bucket"),
-		Key:    aws.String("114096753.jpg"),
-	})
-	if err != nil {
-		fmt.Println("Error getting object from S3", err.Error())
-	}
-
-	return output
 }
