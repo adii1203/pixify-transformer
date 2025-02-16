@@ -34,6 +34,11 @@ func main() {
 		buf := new(bytes.Buffer)
 		buf.ReadFrom(object.Body)
 
+		err = s3Client.PutObjectInProcessedBucket(c.Param("id"), buf.Bytes())
+		if err != nil {
+			return c.JSON(500, "Error saving image")
+		}
+
 		return c.Stream(200, *object.ContentType, bytes.NewReader(buf.Bytes()))
 	})
 

@@ -1,6 +1,7 @@
 package s3
 
 import (
+	"bytes"
 	"context"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -34,4 +35,16 @@ func (s3Client *S3Client) GetObjectFromRawBucket(key string) (*s3.GetObjectOutpu
 	}
 
 	return output, nil
+}
+
+func (s3client *S3Client) PutObjectInProcessedBucket(key string, body []byte) error {
+	_, err := s3client.S3.PutObject(context.Background(), &s3.PutObjectInput{
+		Bucket: aws.String(""),
+		Key:    aws.String(key),
+		Body:   bytes.NewReader(body),
+	})
+	if err != nil {
+		return err
+	}
+	return nil
 }
