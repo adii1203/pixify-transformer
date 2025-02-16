@@ -21,7 +21,12 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Add Go to PATH
-        run: echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc && source ~/.bashrc
+        run: |
+          echo "export PATH=$PATH:/usr/local/go/bin" >> ~/.bashrc
+          echo "export PATH=$PATH:/usr/local/go/bin" >> ~/.profile
+          source ~/.bashrc
+          source ~/.profile
+          go version
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
