@@ -21,7 +21,7 @@ func main() {
 	// 	os.Exit(1)
 	// }
 	port := os.Getenv("PORT")
-
+	fmt.Println("Port: " + port + "\n")
 	e := echo.New()
 
 	e.GET("/:id", func(c echo.Context) error {
