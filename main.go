@@ -43,7 +43,7 @@ func getFromS3(s3Client *client.S3Client) *s3.GetObjectOutput {
 		Key:    aws.String("114096753.jpg"),
 	})
 	if err != nil {
-		fmt.Println("Error getting object from S3")
+		fmt.Println("Error getting object from S3", err.Error())
 	}
 
 	return output
