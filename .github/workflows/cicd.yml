@@ -32,6 +32,4 @@ jobs:
       - name: Build go binary
         run: go build -o pixify-transformer
       - name: Run go binary
-        run: |
-          tmux new-session -d -s pixify-session
-          tmux send-keys -t pixify-session './pixify-transformer > server.log 2>&1' C-m
+        run: tmux new-session -d -s pixify-session 'bash --login -c "./pixify-transformer > server.log 2>&1"'
