@@ -17,9 +17,6 @@ jobs:
         run: echo "PORT=${PORT}" > .env
         env:
           PORT: ${{secrets.PORT}}
-          PIXIFY_TRANSFORMER_PORT: test
-      - name: Stop existing session (if running)
-        run: sudo systemctl stop pixify.service
       - name: Install dependencies
         run: go mod tidy
       - name: Build go binary
@@ -27,5 +24,6 @@ jobs:
       - name: Run go binary
         run: |
           sudo systemctl daemon-reload
+          sudo systemctl stop pixify.service
           sudo systemctl restart pixify.service
           sudo systemctl status pixify.service --no-pager
