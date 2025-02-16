@@ -2,22 +2,25 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 )
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 	// _, err := s3.NewS3Client()
 	// if err != nil {
 	// 	fmt.Println("Error creating S3 client: ", err.Error())
 	// 	os.Exit(1)
 	// }
 	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8000"
-	}
 
 	e := echo.New()
 
