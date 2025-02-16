@@ -20,6 +20,8 @@ jobs:
     needs: build
     runs-on: self-hosted
     steps:
+      - name: Add Go to PATH
+        run: echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc && source ~/.bashrc
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
