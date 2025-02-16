@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 
 	"github.com/aws/aws-sdk-go-v2/service/s3"
@@ -32,7 +31,7 @@ func main() {
 	e.GET("/:id", func(c echo.Context) error {
 		image := getFromS3(s3Client)
 
-		return c.Stream(http.StatusOK, *image.ContentType, image.Body)
+		return c.JSON(200, image.ETag)
 	})
 
 	e.Logger.Fatal(e.Start(":" + port))
