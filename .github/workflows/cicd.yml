@@ -32,4 +32,7 @@ jobs:
       - name: Build go binary
         run: go build -o pixify-transformer
       - name: Run go binary
-        run: tmux new-session -d -s pixify-session './pixify-transformer'
+        run: |
+          sudo systemctl daemon-reload
+          sudo systemctl restart pixify.service
+          sudo systemctl status pixify.service --no-pager
