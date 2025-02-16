@@ -17,6 +17,7 @@ jobs:
         run: echo "PORT=${PORT}" > .env
         env:
           PORT: ${{secrets.PORT}}
+          PIXIFY_TRANSFORMER_PORT: test
       - name: Stop existing session (if running)
         run: sudo systemctl stop pixify.service
       - name: Install dependencies

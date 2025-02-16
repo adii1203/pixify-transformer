@@ -15,11 +15,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
-	// _, err := s3.NewS3Client()
-	// if err != nil {
-	// 	fmt.Println("Error creating S3 client: ", err.Error())
-	// 	os.Exit(1)
-	// }
+
 	port := os.Getenv("PORT")
 	fmt.Println("Port: " + port + "\n")
 	e := echo.New()
