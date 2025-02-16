@@ -6,27 +6,19 @@ on:
       - main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Create .env file
-        run: echo "PORT=${{secrets.PORT}}" >> .env
-        env:
-          PORT: ${{secrets.PORT}}
-
   deploy:
-    needs: build
     runs-on: self-hosted
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Stop existing tmux session (if running)
-        run: |
-          tmux kill-session -t pixify-session || true
+      - name: Create .env file
+        run: echo "PORT=${PORT}" > .env
+        env:
+          PORT: ${{secrets.PORT}}
+      - name: Stop existing session (if running)
+        run: sudo systemctl stop pixify.service
       - name: Install dependencies
         run: go mod tidy
       - name: Build go binary
