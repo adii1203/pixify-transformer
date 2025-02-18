@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"log"
 	"os"
 
@@ -25,6 +26,11 @@ func main() {
 	e := echo.New()
 
 	e.GET("/:id", func(c echo.Context) error {
+		p := c.Path()
+		url := c.Request().URL.String()
+		fmt.Println("Path: ", p)
+		fmt.Println("URL: ", url)
+
 		object, err := s3Client.GetObjectFromRawBucket(c.Param("id"))
 		if err != nil {
 			return c.JSON(500, "Error fetching image")
