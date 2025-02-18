@@ -29,7 +29,6 @@ func main() {
 	e := echo.New()
 
 	e.GET("/:id", func(c echo.Context) error {
-		fmt.Println("Request received")
 		object, err := s3Client.GetObjectFromRawBucket(c.Param("id"))
 		if err != nil {
 			return c.JSON(500, "Error fetching image")
