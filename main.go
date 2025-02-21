@@ -44,8 +44,12 @@ func main() {
 		buf.ReadFrom(object.Body)
 		m := utils.ExtractTransformationsOptions(c.Param("tr"))
 		img, err := transformer.ApplyTransformations(buf.Bytes(), m)
+		if err != nil {
+			return c.JSON(500, "Error transforming image")
+		}
 
-		// err = s3Client.PutObjectInProcessedBucket(c.Param("id"), buf.Bytes())
+		cacheKey := fmt.Sprintf("%s/%s", c.Param("id"), c.Param("tr"))
+		err = s3Client.PutObjectInProcessedBucket(cacheKey, buf.Bytes())
 		if err != nil {
 			return c.JSON(500, "Error saving image")
 		}
