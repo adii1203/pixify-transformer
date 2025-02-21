@@ -37,11 +37,12 @@ func (s3Client *S3Client) GetObjectFromRawBucket(key string) (*s3.GetObjectOutpu
 	return output, nil
 }
 
-func (s3client *S3Client) PutObjectInProcessedBucket(key string, body []byte) error {
+func (s3client *S3Client) PutObjectInProcessedBucket(key string, body []byte, contentType *string) error {
 	_, err := s3client.S3.PutObject(context.Background(), &s3.PutObjectInput{
-		Bucket: aws.String("pixify-transformed-images-bucket"),
-		Key:    aws.String(key),
-		Body:   bytes.NewReader(body),
+		Bucket:      aws.String("pixify-transformed-images-bucket"),
+		Key:         aws.String(key),
+		Body:        bytes.NewReader(body),
+		ContentType: contentType,
 	})
 	if err != nil {
 		return err

@@ -31,8 +31,6 @@ func main() {
 	e := echo.New()
 
 	e.GET("/:id/:tr", func(c echo.Context) error {
-		fmt.Println(c.Param("id"))
-		fmt.Println(c.Request().URL)
 		object, err := s3Client.GetObjectFromRawBucket(c.Param("id"))
 		if err != nil {
 			return c.JSON(500, "Error fetching image")
@@ -49,8 +47,7 @@ func main() {
 		}
 
 		cacheKey := fmt.Sprintf("%s/%s", c.Param("id"), c.Param("tr"))
-		fmt.Println("Cache Key:", cacheKey)
-		err = s3Client.PutObjectInProcessedBucket(cacheKey, buf.Bytes())
+		err = s3Client.PutObjectInProcessedBucket(cacheKey, buf.Bytes(), object.ContentType)
 		if err != nil {
 			return c.JSON(500, "Error saving image")
 		}
