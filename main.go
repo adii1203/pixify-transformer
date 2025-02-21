@@ -49,6 +49,7 @@ func main() {
 		}
 
 		cacheKey := fmt.Sprintf("%s/%s", c.Param("id"), c.Param("tr"))
+		fmt.Println("Cache Key:", cacheKey)
 		err = s3Client.PutObjectInProcessedBucket(cacheKey, buf.Bytes())
 		if err != nil {
 			return c.JSON(500, "Error saving image")
