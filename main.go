@@ -55,10 +55,26 @@ func main() {
 		return c.Stream(200, *object.ContentType, bytes.NewReader(img))
 	})
 
-	// e.GET("/:key/:tr", func(c echo.Context) error {
-	// 	m := extractTransformationsOptions(c.Param("tr"))
-	// 	return c.JSON(200, m)
-	// })
+	e.GET("/:key", func(c echo.Context) error {
+		object, err := s3Client.GetObjectFromRawBucket(c.Param("key"))
+		if err != nil {
+			return c.JSON(500, "Error fetching image")
+		}
+
+		defer object.Body.Close()
+
+		buf := new(bytes.Buffer)
+		buf.ReadFrom(object.Body)
+
+		img := bimg.NewImage(buf.Bytes())
+
+		err = s3Client.PutObjectInProcessedBucket(c.Param("key"), img.Image(), object.ContentType)
+		if err != nil {
+			return c.JSON(500, "Error saving image")
+		}
+
+		return c.Stream(200, *object.ContentType, bytes.NewReader(img.Image()))
+	})
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
